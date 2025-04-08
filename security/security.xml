@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- กำหนดกลุ่มผู้ใช้สำหรับ Dashboard -->
+    <record id="group_dashboard_user" model="res.groups">
+        <field name="name">Dashboard User</field>
+        <field name="category_id" ref="base.module_category_sales_sales"/>
+        <field name="comment">ผู้ใช้ที่สามารถดู Dashboard ได้</field>
+    </record>
+
+    <!-- กำหนดกลุ่มผู้ดูแล Dashboard -->
+    <record id="group_dashboard_manager" model="res.groups">
+        <field name="name">Dashboard Manager</field>
+        <field name="category_id" ref="base.module_category_sales_sales"/>
+        <field name="implied_ids" eval="[(4, ref('group_dashboard_user'))]"/>
+        <field name="comment">ผู้ดูแลระบบที่สามารถจัดการ Dashboard ได้</field>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- กฎการเข้าถึงข้อมูล -->
+    <data noupdate="1">
+        <record id="dashboard_comp_rule" model="ir.rule">
+            <field name="name">Dashboard Multi-Company Rule</field>
+            <field name="model_id" ref="model_dashboard_handler"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

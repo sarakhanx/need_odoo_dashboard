@@ -8,13 +8,17 @@ class DashboardHandler(models.Model):
     _name = "dashboard.handler"
     _description = "Prepare Data for Dashboard"
 
+    # Add company_id field
+    company_id = fields.Many2one('res.company', string='Company', required=True, default=lambda self: self.env.company)
+
     # SALES ORDER KPI
     @api.model
     def get_sale_order_kpis(self, start_date, end_date):
         domain = [
             ('date_order', '>=', start_date),
             ('date_order', '<=', end_date),
-            ('state', 'in', ['sale', 'done'])
+            ('state', 'in', ['sale', 'done']),
+            ('company_id', '=', self.env.company.id)  # Add company filter
         ]
         
         orders = self.env['sale.order'].search(domain)
@@ -35,7 +39,8 @@ class DashboardHandler(models.Model):
         domain = [
             ('date_order', '>=', start_date),
             ('date_order', '<=', end_date),
-            ('state', 'in', ['draft', 'sent'])
+            ('state', 'in', ['draft', 'sent']),
+            ('company_id', '=', self.env.company.id)  # Add company filter
         ]
         
         quotations = self.env['sale.order'].search(domain)
@@ -57,7 +62,8 @@ class DashboardHandler(models.Model):
             ('invoice_date', '>=', start_date),
             ('invoice_date', '<=', end_date),
             ('move_type', 'in', ['out_invoice']),
-            ('state', 'in', ['posted'])
+            ('state', 'in', ['posted']),
+            ('company_id', '=', self.env.company.id)  # Add company filter
         ]
         receipts = self.env['account.move'].search(domain)
         
@@ -91,7 +97,8 @@ class DashboardHandler(models.Model):
         sale_domain = [
             ('date_order', '>=', start_date),
             ('date_order', '<=', end_date),
-            ('state', 'in', ['sale', 'done'])
+            ('state', 'in', ['sale', 'done']),
+            ('company_id', '=', self.env.company.id)  # Add company filter
         ]
         sales = self.env['sale.order'].search(sale_domain)
         for sale in sales:
@@ -102,7 +109,8 @@ class DashboardHandler(models.Model):
         quotation_domain = [
             ('date_order', '>=', start_date),
             ('date_order', '<=', end_date),
-            ('state', 'in', ['draft', 'sent'])
+            ('state', 'in', ['draft', 'sent']),
+            ('company_id', '=', self.env.company.id)  # Add company filter
         ]
         quotations = self.env['sale.order'].search(quotation_domain)
         for quotation in quotations:
@@ -114,7 +122,8 @@ class DashboardHandler(models.Model):
             ('invoice_date', '>=', start_date),
             ('invoice_date', '<=', end_date),
             ('move_type', '=', 'out_invoice'),
-            ('state', '=', 'posted')
+            ('state', '=', 'posted'),
+            ('company_id', '=', self.env.company.id)  # Add company filter
         ]
         invoices = self.env['account.move'].search(invoice_domain)
         for invoice in invoices:
