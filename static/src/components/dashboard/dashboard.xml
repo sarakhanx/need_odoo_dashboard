@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odoo_dashboard.OdooDashboard" owl="1">
+        <div class="vh-100 overflow-auto bg-muted">
+            <div class="col-lg-12">
+                <!-- HEADER SECTION -->
+                <div class="row mx-0">
+                    <div class="col m-0 p-0">
+                        <div class="shadow-sm border p-4 bg-white">
+                            <div class="d-flex align-items-center justify-content-between p-1">
+                                <h1 class="text-dark fw-bolder">แดชบอร์ด NEED 👋</h1>
+                                <div class="d-flex gap-3">
+                                    <div class="form-group">
+                                        <label>วันที่เริ่มต้น</label>
+                                        <input type="date" 
+                                            t-on-change="(ev) => { state.startDate = new Date(ev.target.value); onDateChange(); }"
+                                            t-att-value="formatDateForAPI(state.startDate)"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>วันที่สิ้นสุด</label>
+                                        <input type="date" 
+                                            t-on-change="(ev) => { state.endDate = new Date(ev.target.value); onDateChange(); }"
+                                            t-att-value="formatDateForAPI(state.endDate)"
+                                            class="form-control"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SALES ORDER KPI CARDS SECTION -->
+                <div class="row mx-0 mt-4">
+                    <div class="col-12">
+                        <h3 class="mb-3">คำสั่งขาย (Sales Orders)</h3>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-info">
+                                <h5 class="card-title">ยอดขายทั้งหมด</h5>
+                                <h2 class="text-primary">฿<t t-esc="state.kpiData.total_amount.toLocaleString()"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-info">
+                                <h5 class="card-title">คำสั่งซื้อทั้งหมด</h5>
+                                <h2 class="text-primary"><t t-esc="state.kpiData.total_orders"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-info">
+                                <h5 class="card-title">ค่าเฉลี่ยของคำสั่งซื้อ</h5>
+                                <h2 class="text-primary">฿<t t-esc="state.kpiData.avg_order_value.toLocaleString()"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- QUOTATION KPI CARDS SECTION -->
+                <div class="row mx-0 mt-4">
+                    <div class="col-12">
+                        <h3 class="mb-3">ใบเสนอราคา (Quotations)</h3>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-success">
+                                <h5 class="card-title">มูลค่ารวม</h5>
+                                <h2 class="text-primary">฿<t t-esc="state.quotationData.total_amount.toLocaleString()"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-success">
+                                <h5 class="card-title">จำนวนใบเสนอราคา</h5>
+                                <h2 class="text-primary"><t t-esc="state.quotationData.total_quotations"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-success">
+                                <h5 class="card-title">ค่าเฉลี่ยต่อใบเสนอราคา</h5>
+                                <h2 class="text-primary">฿<t t-esc="state.quotationData.avg_quotation_value.toLocaleString()"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- RECEIPT KPI CARDS SECTION -->
+                <div class="row mx-0 mt-4">
+                    <div class="col-12">
+                        <h3 class="mb-3">ใบแจ้งหนี้ (Receipts)</h3>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-warning">
+                                <h5 class="card-title">มูลค่ารวม</h5>
+                                <h2 class="text-primary">฿<t t-esc="state.receiptData.total_amount.toLocaleString()"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-warning">
+                                <h5 class="card-title">จำนวนใบแจ้งหนี้</h5>
+                                <h2 class="text-primary"><t t-esc="state.receiptData.total_reciepts"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body bg-warning">
+                                <h5 class="card-title">ค่าเฉลี่ยต่อใบแจ้งหนี้</h5>
+                                <h2 class="text-primary">฿<t t-esc="state.receiptData.avg_reciept_value.toLocaleString()"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CHARTS SECTION -->
+                <div class="row mx-0 mt-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h3 class="mb-3">กราฟแสดงข้อมูลรายวัน</h3>
+                                <div class="chart-container w-100" style="position: relative; height:400px;">
+                                    <canvas id="dailyChart" style="width: 100% !important;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TABLES SECTION -->
+
+            </div>
+        </div>
+    </t>
+</templates>
