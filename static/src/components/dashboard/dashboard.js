@@ -160,9 +160,35 @@ export class OdooDashboard extends Component {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                elements: {
+                    point: {
+                        radius: 5,
+                        hoverRadius: 8,
+                        borderWidth: 2,
+                        backgroundColor: 'white'
+                    },
+                    line: {
+                        tension: 0.3
+                    }
+                },
                 plugins: {
                     legend: {
-                        position: 'top',
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        },
+                        onClick: (evt, legendItem, legend) => {
+                            const index = legendItem.datasetIndex;
+                            const ci = legend.chart;
+                            const meta = ci.getDatasetMeta(index);
+                            
+                            meta.hidden = meta.hidden === null ? !ci.data.datasets[index].hidden : null;
+                            
+                            // Apply animation when toggling visibility
+                            ci.update('active');
+                        }
                     },
                     title: {
                         display: true,
