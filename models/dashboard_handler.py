@@ -146,3 +146,48 @@ class DashboardHandler(models.Model):
         
         return result
         
+    # TOP SELLING PRODUCTS
+    @api.model
+    def get_top_selling_products(self, start_date, end_date, limit=20):
+        """Get top selling products with their images"""
+        # Convert string dates to datetime objects
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        
+        # Get confirmed sales orders
+        domain = [
+            ('date_order', '>=', start_date),
+            ('date_order', '<=', end_date),
+            ('state', 'in', ['sale', 'done']),
+            ('company_id', '=', self.env.company.id)
+        ]
+        
+        orders = self.env['sale.order'].search(domain)
+        
+        # Count product quantities
+        product_quantities = {}
+        for order in orders:
+            for line in order.order_line:
+                product_id = line.product_id.id
+                if product_id not in product_quantities:
+                    product_quantities[product_id] = {
+                        'id': product_id,
+                        'name': line.product_id.name,
+                        'quantity': 0,
+                        'amount': 0,
+                        'image_url': line.product_id.image_1920 or False,
+                        'default_code': line.product_id.default_code or '',
+                        'list_price': line.product_id.list_price or 0
+                    }
+                product_quantities[product_id]['quantity'] += line.product_uom_qty
+                product_quantities[product_id]['amount'] += line.price_subtotal
+        
+        # Sort by quantity and get top products
+        sorted_products = sorted(
+            product_quantities.values(), 
+            key=lambda x: x['quantity'], 
+            reverse=True
+        )[:limit]
+        
+        return sorted_products
+        

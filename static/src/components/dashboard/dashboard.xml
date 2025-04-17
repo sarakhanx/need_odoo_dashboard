@@ -139,8 +139,53 @@
                     </div>
                 </div>
                 
-                <!-- TABLES SECTION -->
-
+                <!-- TOP SELLING PRODUCTS SECTION -->
+                <div class="row mx-0 mt-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h3 class="mb-3">สินค้าขายดี</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>รูปภาพ</th>
+                                                <th>ชื่อสินค้า</th>
+                                                <th>รหัสสินค้า</th>
+                                                <th>จำนวนขาย</th>
+                                                <th>มูลค่ารวม</th>
+                                                <th>ราคาต่อชิ้น</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="state.topProducts" t-as="product" t-key="product.id">
+                                                <tr>
+                                                    <td>
+                                                        <t t-if="product.image_url">
+                                                            <img t-att-src="'data:image/png;base64,' + product.image_url" 
+                                                                alt="Product Image" 
+                                                                style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+                                                        </t>
+                                                        <t t-else="">
+                                                            <div style="width: 50px; height: 50px; background-color: #f8f9fa; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                                                <i class="fa fa-image text-muted"></i>
+                                                            </div>
+                                                        </t>
+                                                    </td>
+                                                    <td><t t-esc="product.name"/></td>
+                                                    <td><t t-esc="product.default_code"/></td>
+                                                    <td><t t-esc="product.quantity"/></td>
+                                                    <td>฿<t t-esc="product.amount.toLocaleString()"/></td>
+                                                    <td>฿<t t-esc="product.list_price.toLocaleString()"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </t>
